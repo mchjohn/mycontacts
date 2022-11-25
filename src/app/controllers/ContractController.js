@@ -40,8 +40,16 @@ class ContractController {
   /**
    * @delete Delete one register
    */
-  delete() {
+  async delete(req, res) {
+    const { id } = req.params;
 
+    const contact = await ContactsRepository.findById(id);
+
+    if (!contact) return res.status(404).json({ error: 'Contact not found' });
+
+    await ContactsRepository.delete(id);
+
+    return res.sendStatus(204);
   }
 }
 
