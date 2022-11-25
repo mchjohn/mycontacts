@@ -13,8 +13,14 @@ class ContractController {
   /**
    * @show List one register
    */
-  show() {
+  async show(req, res) {
+    const { id } = req.params;
 
+    const contact = await ContactsRepository.findById(id);
+
+    if (!contact) res.status(404).json({ error: 'Contact not found' });
+
+    res.json(contact);
   }
 
   /**
