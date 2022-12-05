@@ -1,4 +1,4 @@
-API for contact management implemented with NodeJS and ExpressJS.
+API for contact management implemented with NodeJS, ExpressJS and Postgres.
 
 Using the patterns:
 
