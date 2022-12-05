@@ -1,4 +1,4 @@
--- Create an databse
+-- Create an database
 CREATE DATABASE mycontacts;
 
 -- Enable the uuid extension if not existis
