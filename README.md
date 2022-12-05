@@ -1,5 +1,5 @@
 
-# My Contacts
+# My Contacts 📱
 
 API for contact management implemented with NodeJS, ExpressJS and Postgres.
 
@@ -7,7 +7,7 @@ API for contact management implemented with NodeJS, ExpressJS and Postgres.
 - **Repository**: Are classes or components that encapsulate the logic required to access data sources. They centralize common data access functionality, providing better maintainability and decoupling the infrastructure or technology used to access databases from the domain model layer.
 
 
-## Running locally
+## Running locally 🖥️
 
 Clone the project
 
@@ -35,7 +35,7 @@ Start the server
 
 Use the `src/database/schema.sql` file to create your database and tables
 
-With Docker:
+With Docker: 🐳
 
 Download the postgres image
 ```bash
@@ -70,7 +70,7 @@ Connect to your database
 Copy and paste each command from the `src/database/schema.sql` file
 
 Use this insomnia file to perform requests
-## Stack used
+## Stack used 🧰
 
 **Front-End:** 🚧
 
