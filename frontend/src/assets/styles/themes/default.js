@@ -1,3 +1,11 @@
 export default {
-  backgroundColor: '#f6f5fc',
+  colors: {
+    background: '#1B1D25',
+    primary: {
+      500: '#6D6E76',
+      600: '#4E4F59',
+      800: '#1E2029',
+      900: '#1B1D25',
+    },
+  },
 };

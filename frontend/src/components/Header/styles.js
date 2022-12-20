@@ -21,13 +21,15 @@ export const InputSearchContainer = styled.header`
     outline: 0;
     padding: 0 16px;
 
+    color: ${({ theme }) => theme.colors.primary[500]};
+
     border: none;
-    background: #fff;
     border-radius: 4px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0px 4px 10px rgba(27, 29, 37, 0.04);
+    background: ${({ theme }) => theme.colors.primary[800]};
 
     &::placeholder {
-      color: #bcbcbc;
+      color: ${({ theme }) => theme.colors.primary[600]};
     }
   }
 `;

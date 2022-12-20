@@ -1,9 +1,13 @@
 import { Header } from '../Header';
+import { ContactsList } from '../ContactsList';
 
 import { Container } from './styles';
 
 export function Wrapper() {
   return (
-    <Container><Header /></Container>
+    <Container>
+      <Header />
+      <ContactsList />
+    </Container>
   );
 }
