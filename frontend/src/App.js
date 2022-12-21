@@ -1,3 +1,4 @@
+import { BrowserRouter } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 
 import { Wrapper } from './components/Wrapper';
@@ -7,11 +8,13 @@ import defaultTheme from './assets/styles/themes/default';
 
 function App() {
   return (
-    <ThemeProvider theme={defaultTheme}>
-      <Wrapper />
+    <BrowserRouter>
+      <ThemeProvider theme={defaultTheme}>
+        <Wrapper />
 
-      <GlobalStyles />
-    </ThemeProvider>
+        <GlobalStyles />
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

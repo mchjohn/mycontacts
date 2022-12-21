@@ -1,17 +1,23 @@
+import { Link } from 'react-router-dom';
+
 import arrow from '../../assets/images/icons/arrow.svg';
 import edit from '../../assets/images/icons/edit.svg';
 import trash from '../../assets/images/icons/trash.svg';
 
 import {
-  Container, Header, ListContainer, Card,
+  Container, InputSearchContainer, Header, ListContainer, Card,
 } from './styles';
 
-export function ContactsList() {
+export default function Home() {
   return (
     <Container>
+      <InputSearchContainer>
+        <input placeholder="Search contact..." type="text" />
+      </InputSearchContainer>
+
       <Header>
         <strong>3 contacts</strong>
-        <a href="/">New contact</a>
+        <Link to="/new">New contact</Link>
       </Header>
 
       <ListContainer>
@@ -34,31 +40,9 @@ export function ContactsList() {
           </div>
 
           <div className="actions">
-            <a href="/">
+            <Link to="/edit/123">
               <img src={edit} alt="pencil with square" />
-            </a>
-
-            <button type="button">
-              <img src={trash} alt="trash" />
-            </button>
-          </div>
-        </Card>
-
-        <Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Michel John</strong>
-              <small>github</small>
-            </div>
-
-            <span>michel.john@hotmail.com</span>
-            <span>(21) 99999-9999</span>
-          </div>
-
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="pencil with square" />
-            </a>
+            </Link>
 
             <button type="button">
               <img src={trash} alt="trash" />
