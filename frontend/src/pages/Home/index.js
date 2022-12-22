@@ -8,12 +8,12 @@ import {
   Container, InputSearchContainer, Header, ListContainer, Card,
 } from './styles';
 
-import { Modal } from '../../components/Modal';
+import { Loader } from '../../components/Loader';
 
 export default function Home() {
   return (
     <Container>
-      <Modal danger />
+      <Loader />
 
       <InputSearchContainer>
         <input placeholder="Search contact..." type="text" />
