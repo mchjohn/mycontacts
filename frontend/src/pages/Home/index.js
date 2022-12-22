@@ -8,13 +8,9 @@ import {
   Container, InputSearchContainer, Header, ListContainer, Card,
 } from './styles';
 
-import { Loader } from '../../components/Loader';
-
 export default function Home() {
   return (
     <Container>
-      <Loader />
-
       <InputSearchContainer>
         <input placeholder="Search contact..." type="text" />
       </InputSearchContainer>
