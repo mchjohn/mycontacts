@@ -6,6 +6,8 @@ export const Select = styled.select`
   padding: 0 16px;
   font-size: 16px;
 
+  appearance: none;
+
   outline: 0;
   border-radius: 4px;
   border: 2px solid ${({ theme }) => theme.colors.primary[800]};
