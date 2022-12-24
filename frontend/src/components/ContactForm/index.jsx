@@ -2,6 +2,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { isEmailValid } from '../../utils/isEmailValid';
+import { formatPhone } from '../../utils/formatPhone';
 
 import { useErrors } from '../../hooks/useErros';
 
@@ -18,7 +19,11 @@ export function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('');
   const [category, setCategory] = useState('');
 
-  const { setError, removeError, getErrorMessageByFieldName } = useErrors();
+  const {
+    errors, setError, removeError, getErrorMessageByFieldName,
+  } = useErrors();
+
+  const isFormValid = (name && errors.length === 0);
 
   function handleNameChange(event) {
     setName(event.target.value);
@@ -44,11 +49,15 @@ export function ContactForm({ buttonLabel }) {
     event.preventDefault();
   }
 
+  function handlePhoneChange(event) {
+    setPhone(formatPhone(event.target.value));
+  }
+
   return (
     <Form onSubmit={(event) => handleSubmit(event)} noValidate>
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
-          placeholder="Name"
+          placeholder="Name*"
           value={name}
           error={getErrorMessageByFieldName('name')}
           onChange={(event) => handleNameChange(event)}
@@ -69,7 +78,8 @@ export function ContactForm({ buttonLabel }) {
         <Input
           placeholder="Phone"
           value={phone}
-          onChange={(event) => setPhone(event.target.value)}
+          maxLength={15}
+          onChange={(event) => handlePhoneChange(event)}
         />
       </FormGroup>
 
@@ -83,7 +93,7 @@ export function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <ButtonContainer>
-        <Button type="submit">
+        <Button type="submit" disabled={!isFormValid}>
           {buttonLabel}
         </Button>
       </ButtonContainer>
