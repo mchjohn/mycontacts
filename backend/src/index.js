@@ -3,15 +3,15 @@ require('express-async-errors');
 
 const routes = require('./routes');
 
-const PORT = 3000;
+const cors = require('./app/middlewares/cors');
+const errorHandler = require('./app/middlewares/errorHandler');
+
+const PORT = 3001;
 const app = express();
 
 app.use(express.json());
+app.use(cors);
 app.use(routes);
-app.use((error, req, res, next) => {
-  console.log(error);
-
-  res.sendStatus(500);
-});
+app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`🚀 Server started on http://localhost:${PORT}.`));
