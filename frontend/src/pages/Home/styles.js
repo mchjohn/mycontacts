@@ -59,28 +59,34 @@ export const Header = styled.header`
   }
 `;
 
-export const ListContainer = styled.div`
+export const ListHeader = styled.header`
   margin-top: 24px;
+  margin-bottom: 8px;
 
-  header {
-    margin-bottom: 8px;
+  button {
+    border: none;
+    display: flex;
+    align-items: center;
+    background transparent;
 
-    button {
-      border: none;
-      display: flex;
-      align-items: center;
-      background transparent;
-
-      img {
-        transform: rotate(90deg);
-      }
+    img {
+      transform: ${({ orderBy }) => (orderBy === 'asc' ? 'rotate(-90deg)' : 'rotate(90deg)')};
+      transition: transform 0.2s ease-in;
     }
 
-    span {
-      margin-right: 8px;
-      font-weight: bold;
+    &:hover span {
+      color: ${({ theme }) => theme.colors.primary[500]};
+    }
+
+    &:active span {
       color: ${({ theme }) => theme.colors.primary[600]};
     }
+  }
+
+  span {
+    margin-right: 8px;
+    font-weight: bold;
+    color: ${({ theme }) => theme.colors.primary[600]};
   }
 `;
 
