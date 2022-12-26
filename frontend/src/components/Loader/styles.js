@@ -44,7 +44,7 @@ export const Overlay = styled.div`
   left: 0;
   position: absolute;
 
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.4);
 
   .loader {
     width: 1em;
