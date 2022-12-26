@@ -43,7 +43,7 @@ class ContractController {
       name, email, phone, category_id,
     });
 
-    return res.send(contact);
+    return res.status(201).json(contact);
   }
 
   /**
