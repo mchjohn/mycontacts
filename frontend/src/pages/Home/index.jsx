@@ -32,22 +32,25 @@ export default function Home() {
   )), [contacts, searchTerm]);
 
   useEffect(() => {
-    setIsLoading(true);
+    async function loadContacts() {
+      setIsLoading(true);
 
-    fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`)
-      .then(async (res) => {
+      try {
+        const response = await fetch(`http://localhost:3001/contacts?orderBy=${orderBy}`);
+
         await delay();
 
-        const json = await res.json();
+        const json = await response.json();
 
         setContacts(json);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.log(error);
-      })
-      .finally(() => {
+      } finally {
         setIsLoading(false);
-      });
+      }
+    }
+
+    loadContacts();
   }, [orderBy]);
 
   return (
