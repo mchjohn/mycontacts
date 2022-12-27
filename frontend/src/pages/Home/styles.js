@@ -33,9 +33,11 @@ export const InputSearchContainer = styled.header`
 
 export const Header = styled.header`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-top: 32px;
+  padding-bottom: 16px;
+  align-items: center;
+  justify-content: ${({ hasError }) => (hasError ? 'flex-end' : 'space-between')};
+  border-bottom: solid 2px ${({ theme }) => theme.colors.primary[800]};
 
   strong {
     font-size: 24px;
@@ -141,6 +143,24 @@ export const Card = styled.div`
 
     img {
       width: 24px;
+    }
+  }
+`;
+
+export const ErrorContainer = styled.div`
+  margin-top: 16px;
+
+  display: flex;
+  align-items: center;
+
+  .details {
+    margin-left: 24px;
+
+    strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: ${({ theme }) => theme.colors.danger[500]};
     }
   }
 `;
