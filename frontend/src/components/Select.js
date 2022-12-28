@@ -25,4 +25,8 @@ export const Select = styled.select`
   &:focus {
     border-color: ${({ theme }) => theme.colors.primary[600]};
   }
+
+  &[disabled] {
+    opacity: 0.3;
+  }
 `;

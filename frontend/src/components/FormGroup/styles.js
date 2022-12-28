@@ -11,4 +11,14 @@ export const Container = styled.div`
     font-size: 12px;
     color: ${({ theme }) => theme.colors.danger[500]}
   }
+
+  .form-item {
+    position: relative;
+
+    .loader {
+      top: 18px;
+      right: 16px;
+      position: absolute;
+    }
+  }
 `;

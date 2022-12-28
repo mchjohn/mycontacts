@@ -30,4 +30,8 @@ export const Input = styled.input`
     color: ${theme.colors.danger[500]};
     border-color: ${theme.colors.danger[500]} !important;
   `}
+
+  &[disabled] {
+    opacity: 0.6;
+  }
 `;

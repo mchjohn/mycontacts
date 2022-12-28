@@ -33,9 +33,11 @@ export const InputSearchContainer = styled.header`
 
 export const Header = styled.header`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
   margin-top: 32px;
+  padding-bottom: 16px;
+  align-items: center;
+  justify-content: ${({ justifyContent }) => justifyContent};
+  border-bottom: solid 2px ${({ theme }) => theme.colors.primary[800]};
 
   strong {
     font-size: 24px;
@@ -142,5 +144,57 @@ export const Card = styled.div`
     img {
       width: 24px;
     }
+  }
+`;
+
+export const ErrorContainer = styled.div`
+  margin-top: 16px;
+
+  display: flex;
+  align-items: center;
+
+  .details {
+    margin-left: 24px;
+
+    strong {
+      display: block;
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: ${({ theme }) => theme.colors.danger[500]};
+    }
+  }
+`;
+
+export const EmptyListContainer = styled.div`
+  margin-top: 16px;
+
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  img {
+    margin-bottom: 8px;
+  }
+
+  strong {
+    color: ${({ theme }) => theme.colors.primary[500]};
+  }
+`;
+
+export const SearchNotFoundContainer = styled.div`
+  margin-top: 16px;
+
+  display: flex;
+  align-items: center;
+
+  span {
+    word-break: break-word;
+
+    margin-left: 24px;
+    color: ${({ theme }) => theme.colors.primary[600]};
+  }
+
+  strong {
+    color: ${({ theme }) => theme.colors.primary[500]};
   }
 `;
