@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-no-bind */
 import { PageHeader } from '../../components/PageHeader';
 import { ContactForm } from '../../components/ContactForm';
 import ContactsService from '../../services/ContactsService';

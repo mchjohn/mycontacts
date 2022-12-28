@@ -1,4 +1,3 @@
-/* eslint-disable no-shadow */
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
@@ -77,13 +76,13 @@ export function ContactForm({ buttonLabel, onSubmit }) {
   }, []);
 
   return (
-    <Form onSubmit={(event) => handleSubmit(event)} noValidate>
+    <Form onSubmit={handleSubmit} noValidate>
       <FormGroup error={getErrorMessageByFieldName('name')}>
         <Input
           placeholder="Name*"
           value={name}
           error={getErrorMessageByFieldName('name')}
-          onChange={(event) => handleNameChange(event)}
+          onChange={handleNameChange}
         />
       </FormGroup>
 
@@ -93,7 +92,7 @@ export function ContactForm({ buttonLabel, onSubmit }) {
           type="email"
           value={email}
           error={getErrorMessageByFieldName('email')}
-          onChange={(event) => handleEmailChange(event)}
+          onChange={handleEmailChange}
         />
       </FormGroup>
 
@@ -102,7 +101,7 @@ export function ContactForm({ buttonLabel, onSubmit }) {
           placeholder="Phone"
           value={phone}
           maxLength={15}
-          onChange={(event) => handlePhoneChange(event)}
+          onChange={handlePhoneChange}
         />
       </FormGroup>
 

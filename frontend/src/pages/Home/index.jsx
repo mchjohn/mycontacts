@@ -104,7 +104,7 @@ export default function Home() {
           <div className="details">
             <strong>An error occurred while to get your contacts.</strong>
 
-            <Button type="button" onClick={() => handleTryAgain()}>
+            <Button type="button" onClick={handleTryAgain}>
               Try again
             </Button>
           </div>
