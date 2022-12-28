@@ -11,5 +11,8 @@ export default {
       500: '#ba2b2b',
       600: '#922121',
     },
+    success: {
+      main: '#066839',
+    },
   },
 };
