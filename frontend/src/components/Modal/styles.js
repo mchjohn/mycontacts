@@ -10,7 +10,7 @@ export const Overlay = styled.div`
 
   top: 0;
   left: 0;
-  position: absolute;
+  position: fixed;
 
   backdrop-filter: blur(3px);
   background: rgba(0, 0, 0, 0.6);
@@ -25,13 +25,13 @@ export const Container = styled.div`
   box-shadow: 0px 4px 10px rgba(27, 29, 37, 0.04);
   background: ${({ theme }) => theme.colors.primary[900]};
 
-  h1 {
+  > h1 {
     font-size: 22px;
     color: ${({ theme, danger }) => (danger ? theme.colors.danger[500] : theme.colors.primary[500])};
   }
 
-  p {
-    margin-top: 8px;
+  .modal-body {
+    margin-top: 32px;
   }
 `;
 
@@ -45,7 +45,7 @@ export const Footer = styled.footer`
   .cancel-button {
     border: none;
     font-size: 16px;
-    margin-right: 8px;
+    margin-right: 24px;
     background: transparent;
     color: ${({ theme }) => theme.colors.primary[500]};
 
@@ -57,6 +57,10 @@ export const Footer = styled.footer`
 
     &:active {
       color: ${({ theme }) => theme.colors.primary[500]};
+    }
+
+    &[disabled] {
+      cursor: not-allowed;
     }
   }
 `;
