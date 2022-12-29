@@ -23,6 +23,7 @@ export const Container = styled.div`
   box-shadow: 0px 4px 10px rgba(27, 29, 37, 0.04);
 
   color: #FDFFFF;
+  cursor: pointer;
 
   ${({ type }) => containerVariants[type] || containerVariants.default};
 
