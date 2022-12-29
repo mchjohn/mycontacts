@@ -32,9 +32,6 @@ export const Container = styled.div`
 
   img {
     width: 24px;
-  }
-
-  strong {
-    margin-left: 8px;
+    margin-right: 8px;
   }
 `;
