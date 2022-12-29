@@ -59,6 +59,11 @@ export function ContactForm({ buttonLabel, onSubmit }) {
       name, email, phone, categoryId,
     })
       .finally(() => setIsSubmitting(false));
+
+    setName('');
+    setEmail('');
+    setPhone('');
+    setCategoryId('');
   }
 
   function handlePhoneChange(event) {
