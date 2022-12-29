@@ -13,11 +13,32 @@ export default function EditContact() {
   const history = useHistory();
 
   const contactFormRef = useRef(null);
-  const [contactName, setContactName] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const [contactName, setContactName] = useState('');
 
-  function handleSubmit() {
-    // TODO:
+  async function handleSubmit(formData) {
+    try {
+      const contact = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        category_id: formData.categoryId,
+      };
+
+      const contactData = await ContactsService.updateContact(id, contact);
+
+      setContactName(contactData.name);
+
+      toast({
+        type: 'success',
+        text: 'Contact successfully updated',
+      });
+    } catch {
+      toast({
+        type: 'danger',
+        text: 'Error when trying to update contact',
+      });
+    }
   }
 
   useEffect(() => {

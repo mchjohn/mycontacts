@@ -59,13 +59,7 @@ export const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
 
     onSubmit({
       name, email, phone, categoryId,
-    })
-      .finally(() => setIsSubmitting(false));
-
-    setName('');
-    setEmail('');
-    setPhone('');
-    setCategoryId('');
+    }).finally(() => setIsSubmitting(false));
   }
 
   function handlePhoneChange(event) {
@@ -78,6 +72,12 @@ export const ContactForm = forwardRef(({ buttonLabel, onSubmit }, ref) => {
       setEmail(contact.email ?? '');
       setPhone(formatPhone(contact.phone) ?? '');
       setCategoryId(contact.category_id ?? '');
+    },
+    resetFields: () => {
+      setName('');
+      setEmail('');
+      setPhone('');
+      setCategoryId('');
     },
   }), []);
 
