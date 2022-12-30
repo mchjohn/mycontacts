@@ -4,6 +4,8 @@ import { useParams, useHistory } from 'react-router-dom';
 import { toast } from '../../utils/toast';
 import ContactsService from '../../services/ContactsService';
 
+import { useIsMounted } from '../../hooks/useIsMounted';
+
 import { Loader } from '../../components/Loader';
 import { PageHeader } from '../../components/PageHeader';
 import { ContactForm } from '../../components/ContactForm';
@@ -15,6 +17,8 @@ export default function EditContact() {
   const contactFormRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
   const [contactName, setContactName] = useState('');
+
+  const isMounted = useIsMounted();
 
   async function handleSubmit(formData) {
     try {
@@ -46,21 +50,25 @@ export default function EditContact() {
       try {
         const contact = await ContactsService.getContactById(id);
 
-        contactFormRef.current.setFieldValues(contact);
+        if (isMounted()) {
+          contactFormRef.current.setFieldValues(contact);
 
-        setIsLoading(false);
-        setContactName(contact.name);
+          setIsLoading(false);
+          setContactName(contact.name);
+        }
       } catch {
-        history.push('/');
-        toast({
-          type: 'danger',
-          text: 'Contact not found',
-        });
+        if (isMounted()) {
+          history.push('/');
+          toast({
+            type: 'danger',
+            text: 'Contact not found',
+          });
+        }
       }
     }
 
     loadContact();
-  }, [history, id]);
+  }, [history, id, isMounted]);
 
   return (
     <>
