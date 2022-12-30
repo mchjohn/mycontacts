@@ -18,7 +18,7 @@ Clone the project
 Enter the project directory
 
 ```bash
-  cd mycontacts
+  cd mycontacts/backend
 ```
 
 Install the dependencies
@@ -71,8 +71,6 @@ Copy and paste each command from the `src/database/schema.sql` file
 
 Use this insomnia file to perform requests
 ## Stack used 🧰
-
-**Front-End:** 🚧
 
 **Back-End:** Node, Express and PostgreSQL
 
