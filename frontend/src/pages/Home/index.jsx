@@ -4,15 +4,17 @@ import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
 
+import { toast } from '../../utils/toast';
 import ContactsService from '../../services/ContactsService';
 
 import edit from '../../assets/images/icons/edit.svg';
 import arrow from '../../assets/images/icons/arrow.svg';
 import trash from '../../assets/images/icons/trash.svg';
-import errorIcon from '../../assets/images/icons/error.svg';
 import alert from '../../assets/images/icons/alert.svg';
+import errorIcon from '../../assets/images/icons/error.svg';
 import emptySearch from '../../assets/images/icons/empty-search.svg';
 
+import { Modal } from '../../components/Modal';
 import { Loader } from '../../components/Loader';
 import { Button } from '../../components/Button';
 
@@ -33,6 +35,9 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
+  const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
+  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   const loadContacts = useCallback(async () => {
     try {
@@ -44,8 +49,6 @@ export default function Home() {
       setContacts(contactsList);
     } catch (error) {
       setHasError(true);
-
-      console.log('This is a', error);
     } finally {
       setIsLoading(false);
     }
@@ -63,6 +66,42 @@ export default function Home() {
     loadContacts();
   }
 
+  function handleDeleteContact(contact) {
+    setContactBeingDeleted(contact);
+    setIsModalDeleteVisible(true);
+  }
+
+  function handleCloseDeleteModal() {
+    setIsModalDeleteVisible(false);
+    setContactBeingDeleted(null);
+  }
+
+  async function handleConfirmDeleteContact() {
+    try {
+      setIsLoadingDelete(true);
+
+      await ContactsService.deleteContact(contactBeingDeleted.id);
+
+      setContacts((prevState) => prevState.filter(
+        (contact) => contact.id !== contactBeingDeleted.id,
+      ));
+
+      handleCloseDeleteModal();
+
+      toast({
+        type: 'success',
+        text: 'Contact successfully deleted.',
+      });
+    } catch {
+      toast({
+        type: 'danger',
+        text: 'Error when trying to delete contact.',
+      });
+    } finally {
+      setIsLoadingDelete(false);
+    }
+  }
+
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
     contact.name.toLowerCase().includes(searchTerm.toLowerCase())
   )), [contacts, searchTerm]);
@@ -76,6 +115,18 @@ export default function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+
+      <Modal
+        danger
+        confirmLabel="Delete"
+        isLoading={isLoadingDelete}
+        visible={isModalDeleteVisible}
+        onCancel={handleCloseDeleteModal}
+        onConfirm={handleConfirmDeleteContact}
+        title={`Do you really want to delete the contact "${contactBeingDeleted?.name}"?`}
+      >
+        <p>This action cannot be undone.</p>
+      </Modal>
 
       {contacts.length > 0 && (
         <InputSearchContainer>
@@ -161,7 +212,10 @@ export default function Home() {
                   <img src={edit} alt="pencil with square" />
                 </Link>
 
-                <button type="button">
+                <button
+                  type="button"
+                  onClick={() => handleDeleteContact(contact)}
+                >
                   <img src={trash} alt="trash" />
                 </button>
               </div>
