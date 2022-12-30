@@ -1,9 +1,7 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import { Loader } from '../../components/Loader';
-
-import { useHome } from './useHome';
-
 import { Header } from './components/Header';
+import { Modal } from '../../components/Modal';
+import { Loader } from '../../components/Loader';
 import { InputSearch } from './components/InputSearch';
 import { ErrorStatus } from './components/ErrorStatus';
 import { EmptyListContainer } from './components/EmptyListContainer';
@@ -12,8 +10,9 @@ import { SearchNotFoundContainer } from './components/SearchNotFoundContainer';
 import {
   Container,
 } from './styles';
+
+import { useHome } from './useHome';
 import { ContactsList } from './components/ContactsList';
-import { Modal } from '../../components/Modal';
 
 export default function Home() {
   const {
@@ -37,13 +36,15 @@ export default function Home() {
     handleConfirmDeleteContact,
   } = useHome();
 
+  const hasContacts = contacts.length > 0;
+  const isListEmpty = !hasError && (!isLoading && !hasContacts);
+  const isSearchEmpty = !hasError && (hasContacts && filteredContacts.length < 1);
+
   return (
     <Container>
       <Loader isLoading={isLoading} />
 
-      {contacts.length > 0 && (
-        <InputSearch value={searchTerm} onChange={handleSearchTerm} />
-      )}
+      {hasContacts && <InputSearch value={searchTerm} onChange={handleSearchTerm} />}
 
       <Header
         hasError={hasError}
@@ -51,20 +52,14 @@ export default function Home() {
         quantityOfFilteredContacts={filteredContacts.length}
       />
 
-      {hasError && (
-        <ErrorStatus onTryAgain={handleTryAgain} />
-      )}
+      {hasError && <ErrorStatus onTryAgain={handleTryAgain} />}
 
-      {!hasError && (
+      {isListEmpty && <EmptyListContainer />}
+
+      {isSearchEmpty && <SearchNotFoundContainer searchTerm={searchTerm} />}
+
+      {hasContacts && (
         <>
-          {(contacts.length < 1 && !isLoading) && (
-            <EmptyListContainer />
-          )}
-
-          {contacts.length > 0 && filteredContacts.length < 1 && (
-            <SearchNotFoundContainer searchTerm={searchTerm} />
-          )}
-
           <ContactsList
             orderBy={orderBy}
             isLoadingDelete={isLoadingDelete}
