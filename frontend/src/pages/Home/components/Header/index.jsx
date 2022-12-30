@@ -21,7 +21,7 @@ export function Header({
     <Container
       justifyContent={alignment}
     >
-      {(!hasError && quantityOfContacts) && (
+      {(!hasError && quantityOfContacts > 0) && (
         <strong>
           {quantityOfFilteredContacts}
           {quantityOfFilteredContacts === 1 ? ' contato' : ' contatos'}
