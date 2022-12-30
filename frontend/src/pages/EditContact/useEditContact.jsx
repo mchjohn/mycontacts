@@ -6,9 +6,7 @@ import ContactsService from '../../services/ContactsService';
 
 import { useIsMounted } from '../../hooks/useIsMounted';
 
-import Presentation from './Presentation';
-
-export default function Container() {
+export function useEditContact() {
   const { id } = useParams();
   const history = useHistory();
 
@@ -61,12 +59,10 @@ export default function Container() {
     loadContact();
   }, [history, id, isMounted]);
 
-  return (
-    <Presentation
-      isLoading={isLoading}
-      contactName={contactName}
-      contactFormRef={contactFormRef}
-      onSubmit={handleSubmit}
-    />
-  );
+  return {
+    isLoading,
+    contactName,
+    contactFormRef,
+    handleSubmit,
+  };
 }
