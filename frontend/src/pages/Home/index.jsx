@@ -1,226 +1,88 @@
 /* eslint-disable react/jsx-one-expression-per-line */
-import { Link } from 'react-router-dom';
-import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
-
-import { toast } from '../../utils/toast';
-import ContactsService from '../../services/ContactsService';
-
-import edit from '../../assets/images/icons/edit.svg';
-import arrow from '../../assets/images/icons/arrow.svg';
-import trash from '../../assets/images/icons/trash.svg';
-import alert from '../../assets/images/icons/alert.svg';
-import errorIcon from '../../assets/images/icons/error.svg';
-import emptySearch from '../../assets/images/icons/empty-search.svg';
-
+import { Header } from './components/Header';
 import { Modal } from '../../components/Modal';
 import { Loader } from '../../components/Loader';
-import { Button } from '../../components/Button';
+import { InputSearch } from './components/InputSearch';
+import { ErrorStatus } from './components/ErrorStatus';
+import { EmptyListContainer } from './components/EmptyListContainer';
+import { SearchNotFoundContainer } from './components/SearchNotFoundContainer';
 
 import {
   Container,
-  InputSearchContainer,
-  Header,
-  ListHeader,
-  Card,
-  ErrorContainer,
-  EmptyListContainer,
-  SearchNotFoundContainer,
 } from './styles';
 
+import { useHome } from './useHome';
+import { ContactsList } from './components/ContactsList';
+
 export default function Home() {
-  const [contacts, setContacts] = useState([]);
-  const [orderBy, setOrderBy] = useState('asc');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasError, setHasError] = useState(false);
-  const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
-  const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
-  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const {
+    orderBy,
+    searchTerm,
+    contactBeingDeleted,
 
-  const loadContacts = useCallback(async () => {
-    try {
-      setIsLoading(true);
+    contacts,
+    filteredContacts,
 
-      const contactsList = await ContactsService.listContacts(orderBy);
+    hasError,
+    isLoading,
+    isLoadingDelete,
+    isModalDeleteVisible,
 
-      setHasError(false);
-      setContacts(contactsList);
-    } catch (error) {
-      setHasError(true);
-    } finally {
-      setIsLoading(false);
-    }
-  }, [orderBy]);
+    handleTryAgain,
+    handleSearchTerm,
+    handleToggleOrderBy,
+    handleDeleteContact,
+    handleCloseDeleteModal,
+    handleConfirmDeleteContact,
+  } = useHome();
 
-  function handleToggleOrderBy() {
-    setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  }
-
-  function handleSearchTerm(event) {
-    setSearchTerm(event.target.value);
-  }
-
-  function handleTryAgain() {
-    loadContacts();
-  }
-
-  function handleDeleteContact(contact) {
-    setContactBeingDeleted(contact);
-    setIsModalDeleteVisible(true);
-  }
-
-  function handleCloseDeleteModal() {
-    setIsModalDeleteVisible(false);
-    setContactBeingDeleted(null);
-  }
-
-  async function handleConfirmDeleteContact() {
-    try {
-      setIsLoadingDelete(true);
-
-      await ContactsService.deleteContact(contactBeingDeleted.id);
-
-      setContacts((prevState) => prevState.filter(
-        (contact) => contact.id !== contactBeingDeleted.id,
-      ));
-
-      handleCloseDeleteModal();
-
-      toast({
-        type: 'success',
-        text: 'Contact successfully deleted.',
-      });
-    } catch {
-      toast({
-        type: 'danger',
-        text: 'Error when trying to delete contact.',
-      });
-    } finally {
-      setIsLoadingDelete(false);
-    }
-  }
-
-  const filteredContacts = useMemo(() => contacts.filter((contact) => (
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )), [contacts, searchTerm]);
-
-  const spaceBetweenOrCenter = contacts.length > 0 ? 'space-between' : 'center';
-
-  useEffect(() => {
-    loadContacts();
-  }, [loadContacts]);
+  const hasContacts = contacts.length > 0;
+  const isListEmpty = !hasError && (!isLoading && !hasContacts);
+  const isSearchEmpty = !hasError && (hasContacts && filteredContacts.length < 1);
 
   return (
     <Container>
       <Loader isLoading={isLoading} />
 
-      <Modal
-        danger
-        confirmLabel="Delete"
-        isLoading={isLoadingDelete}
-        visible={isModalDeleteVisible}
-        onCancel={handleCloseDeleteModal}
-        onConfirm={handleConfirmDeleteContact}
-        title={`Do you really want to delete the contact "${contactBeingDeleted?.name}"?`}
-      >
-        <p>This action cannot be undone.</p>
-      </Modal>
+      {hasContacts && <InputSearch value={searchTerm} onChange={handleSearchTerm} />}
 
-      {contacts.length > 0 && (
-        <InputSearchContainer>
-          <input
-            type="text"
-            placeholder="Search contact..."
-            value={searchTerm}
-            onChange={handleSearchTerm}
-          />
-        </InputSearchContainer>
-      )}
+      <Header
+        hasError={hasError}
+        quantityOfContacts={contacts.length}
+        quantityOfFilteredContacts={filteredContacts.length}
+      />
 
-      <Header justifyContent={hasError ? 'flex-end' : spaceBetweenOrCenter}>
-        {(!hasError && contacts.length > 0) && (
-          <strong>
-            {filteredContacts.length}
-            {filteredContacts.length === 1 ? ' contato' : ' contatos'}
-          </strong>
-        )}
-        <Link to="/new">New contact</Link>
-      </Header>
+      {hasError && <ErrorStatus onTryAgain={handleTryAgain} />}
 
-      {hasError && (
-        <ErrorContainer>
-          <img src={errorIcon} alt="alert signal" />
-          <div className="details">
-            <strong>An error occurred while to get your contacts.</strong>
+      {isListEmpty && <EmptyListContainer />}
 
-            <Button type="button" onClick={handleTryAgain}>
-              Try again
-            </Button>
-          </div>
-        </ErrorContainer>
-      )}
+      {isSearchEmpty && <SearchNotFoundContainer searchTerm={searchTerm} />}
 
-      {!hasError && (
+      {hasContacts && (
         <>
-          {(contacts.length < 1 && !isLoading) && (
-            <EmptyListContainer>
-              <img src={alert} alt="alert signal" />
+          <ContactsList
+            orderBy={orderBy}
+            isLoadingDelete={isLoadingDelete}
+            filteredContacts={filteredContacts}
+            contactBeingDeleted={contactBeingDeleted}
+            isModalDeleteVisible={isModalDeleteVisible}
+            onDeleteContact={handleDeleteContact}
+            onToggleOrderBy={handleToggleOrderBy}
+            onCloseDeleteModal={handleCloseDeleteModal}
+            onConfirmDeleteContact={handleConfirmDeleteContact}
+          />
 
-              <p>
-                You do not have any registered contacts.
-              </p>
-              <p>
-                Click on <strong> &ldquo;New contact&ldquo; </strong>
-                to register a contact.
-              </p>
-            </EmptyListContainer>
-          )}
-
-          {contacts.length > 0 && filteredContacts.length < 1 && (
-            <SearchNotFoundContainer>
-              <img src={emptySearch} alt="Magnifying glass" />
-              <span>No results were found for <strong>&ldquo;{searchTerm}&ldquo;</strong>.</span>
-            </SearchNotFoundContainer>
-          )}
-
-          {filteredContacts.length > 0 && (
-            <ListHeader orderBy={orderBy}>
-              <button type="button" onClick={handleToggleOrderBy}>
-                <span>Name</span>
-                <img src={arrow} alt="Arrow" />
-              </button>
-            </ListHeader>
-          )}
-
-          {filteredContacts.map((contact) => (
-            <Card key={contact.id}>
-              <div className="info">
-                <div className="contact-name">
-                  <strong>{contact.name}</strong>
-                  {contact.category_name
-                    && <small>{contact.category_name}</small>}
-                </div>
-
-                <span>{contact.email}</span>
-                <span>{contact.phone}</span>
-              </div>
-
-              <div className="actions">
-                <Link to={`/edit/${contact.id}`}>
-                  <img src={edit} alt="pencil with square" />
-                </Link>
-
-                <button
-                  type="button"
-                  onClick={() => handleDeleteContact(contact)}
-                >
-                  <img src={trash} alt="trash" />
-                </button>
-              </div>
-            </Card>
-          ))}
+          <Modal
+            danger
+            confirmLabel="Delete"
+            isLoading={isLoadingDelete}
+            visible={isModalDeleteVisible}
+            onCancel={handleCloseDeleteModal}
+            onConfirm={handleConfirmDeleteContact}
+            title={`Do you really want to delete the contact "${contactBeingDeleted?.name}"?`}
+          >
+            <p>This action cannot be undone.</p>
+          </Modal>
         </>
       )}
     </Container>
