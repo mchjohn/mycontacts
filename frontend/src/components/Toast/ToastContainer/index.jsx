@@ -1,4 +1,4 @@
-import { ToastMessage } from '../ToastMessage';
+import ToastMessage from '../ToastMessage';
 
 import { useToastContainer } from './useToastContainer';
 
