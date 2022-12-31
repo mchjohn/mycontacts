@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 import check from '../../../assets/images/icons/check.svg';
 import error from '../../../assets/images/icons/error.svg';
@@ -7,29 +7,11 @@ import error from '../../../assets/images/icons/error.svg';
 import { Container } from './styles';
 
 export function ToastMessage({
-  message, onRenoveMessage, isLeaving, onAnimationEnd,
+  message, onRenoveMessage, isLeaving, animatedRef,
 }) {
-  const animatedElementRef = useRef(null);
-
   function handleRemoveToast() {
     onRenoveMessage(message.id);
   }
-
-  useEffect(() => {
-    function handleAnimationEnd() {
-      onAnimationEnd(message.id);
-    }
-
-    const elementRef = animatedElementRef.current;
-
-    if (isLeaving) {
-      elementRef.addEventListener('animationend', handleAnimationEnd);
-    }
-
-    return () => {
-      elementRef.removeEventListener('animationend', handleAnimationEnd);
-    };
-  }, [isLeaving, message.id, onAnimationEnd]);
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
@@ -45,7 +27,7 @@ export function ToastMessage({
       role="button"
       type={message.type}
       isLeaving={isLeaving}
-      ref={animatedElementRef}
+      ref={animatedRef}
       onClick={handleRemoveToast}
     >
       {message.type === 'danger' && <img src={error} alt="Error signal" />}
@@ -63,6 +45,6 @@ ToastMessage.propTypes = {
     type: PropTypes.oneOf(['default', 'success', 'danger']),
   }).isRequired,
   isLeaving: PropTypes.bool.isRequired,
-  onAnimationEnd: PropTypes.func.isRequired,
   onRenoveMessage: PropTypes.func.isRequired,
+  animatedRef: PropTypes.shape().isRequired,
 };
