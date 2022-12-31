@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { memo, useEffect } from 'react';
 
 import check from '../../../assets/images/icons/check.svg';
 import error from '../../../assets/images/icons/error.svg';
 
 import { Container } from './styles';
 
-export function ToastMessage({ message, onRenoveMessage }) {
+function ToastMessage({
+  message, onRenoveMessage, isLeaving, animatedRef,
+}) {
   function handleRemoveToast() {
     onRenoveMessage(message.id);
   }
@@ -14,7 +16,7 @@ export function ToastMessage({ message, onRenoveMessage }) {
   useEffect(() => {
     const timeoutId = setTimeout(() => {
       onRenoveMessage(message.id);
-    }, message.duration || 7000);
+    }, message.duration || 5000);
 
     return () => clearTimeout(timeoutId);
   }, [message.duration, message.id, onRenoveMessage]);
@@ -24,6 +26,8 @@ export function ToastMessage({ message, onRenoveMessage }) {
       tabIndex={0}
       role="button"
       type={message.type}
+      isLeaving={isLeaving}
+      ref={animatedRef}
       onClick={handleRemoveToast}
     >
       {message.type === 'danger' && <img src={error} alt="Error signal" />}
@@ -40,5 +44,9 @@ ToastMessage.propTypes = {
     duration: PropTypes.number,
     type: PropTypes.oneOf(['default', 'success', 'danger']),
   }).isRequired,
+  isLeaving: PropTypes.bool.isRequired,
   onRenoveMessage: PropTypes.func.isRequired,
+  animatedRef: PropTypes.shape().isRequired,
 };
+
+export default memo(ToastMessage);
