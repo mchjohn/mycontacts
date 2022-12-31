@@ -59,9 +59,8 @@ export function useAnimatedList() {
           animatedElement.addEventListener('animationend', onAnimationEnd);
         };
 
-        animationEndListeners.current.set(itemId, onAnimationEnd);
-
-        animatedElement.addEventListener('animationend', removeListener);
+        animatedElement.addEventListener('animationend', onAnimationEnd);
+        animationEndListeners.current.set(itemId, removeListener);
       }
     });
   }, [handleAnimationEnd, pendingRemovalItemsIds]);
