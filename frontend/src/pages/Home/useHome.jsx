@@ -1,5 +1,5 @@
 import {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useDeferredValue, useEffect, useMemo, useState,
 } from 'react';
 
 import { toast } from '../../utils/toast';
@@ -15,15 +15,19 @@ export function useHome() {
   const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
-  const loadContacts = useCallback(async () => {
+  const deferredSearchTerm = useDeferredValue(searchTerm);
+
+  const loadContacts = useCallback(async (signal) => {
     try {
       setIsLoading(true);
 
-      const contactsList = await ContactsService.listContacts(orderBy);
+      const contactsList = await ContactsService.listContacts(orderBy, signal);
 
       setHasError(false);
       setContacts(contactsList);
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+
       setHasError(true);
       setContacts([]);
     } finally {
@@ -31,9 +35,9 @@ export function useHome() {
     }
   }, [orderBy]);
 
-  function handleToggleOrderBy() {
+  const handleToggleOrderBy = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  }
+  }, []);
 
   function handleSearchTerm(event) {
     setSearchTerm(event.target.value);
@@ -43,10 +47,10 @@ export function useHome() {
     loadContacts();
   }
 
-  function handleDeleteContact(contact) {
+  const handleDeleteContact = useCallback((contact) => {
     setContactBeingDeleted(contact);
     setIsModalDeleteVisible(true);
-  }
+  }, []);
 
   function handleCloseDeleteModal() {
     setIsModalDeleteVisible(false);
@@ -79,13 +83,19 @@ export function useHome() {
   }
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )), [contacts, searchTerm]);
+    contact.name.toLowerCase().includes(deferredSearchTerm.toLowerCase())
+  )), [contacts, deferredSearchTerm]);
 
   const spaceBetweenOrCenter = contacts.length > 0 ? 'space-between' : 'center';
 
   useEffect(() => {
-    loadContacts();
+    const controller = new AbortController();
+
+    loadContacts(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
   }, [loadContacts]);
 
   return {

@@ -2,6 +2,7 @@
 import { Header } from './components/Header';
 import { Modal } from '../../components/Modal';
 import { Loader } from '../../components/Loader';
+import ContactsList from './components/ContactsList';
 import { InputSearch } from './components/InputSearch';
 import { ErrorStatus } from './components/ErrorStatus';
 import { EmptyListContainer } from './components/EmptyListContainer';
@@ -12,7 +13,6 @@ import {
 } from './styles';
 
 import { useHome } from './useHome';
-import { ContactsList } from './components/ContactsList';
 
 export default function Home() {
   const {

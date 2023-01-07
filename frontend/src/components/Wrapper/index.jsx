@@ -1,4 +1,4 @@
-import Routes from '../../Routes';
+import Router from '../../Router';
 
 import { Header } from '../Header';
 
@@ -8,7 +8,7 @@ export function Wrapper() {
   return (
     <Container>
       <Header />
-      <Routes />
+      <Router />
     </Container>
   );
 }
