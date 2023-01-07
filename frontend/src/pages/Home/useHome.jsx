@@ -17,15 +17,17 @@ export function useHome() {
 
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
-  const loadContacts = useCallback(async () => {
+  const loadContacts = useCallback(async (signal) => {
     try {
       setIsLoading(true);
 
-      const contactsList = await ContactsService.listContacts(orderBy);
+      const contactsList = await ContactsService.listContacts(orderBy, signal);
 
       setHasError(false);
       setContacts(contactsList);
     } catch (error) {
+      if (error instanceof DOMException && error.name === 'AbortError') return;
+
       setHasError(true);
       setContacts([]);
     } finally {
@@ -87,7 +89,13 @@ export function useHome() {
   const spaceBetweenOrCenter = contacts.length > 0 ? 'space-between' : 'center';
 
   useEffect(() => {
-    loadContacts();
+    const controller = new AbortController();
+
+    loadContacts(controller.signal);
+
+    return () => {
+      controller.abort();
+    };
   }, [loadContacts]);
 
   return {
