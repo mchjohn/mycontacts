@@ -1,5 +1,5 @@
 import {
-  useCallback, useEffect, useMemo, useState,
+  useCallback, useDeferredValue, useEffect, useMemo, useState,
 } from 'react';
 
 import { toast } from '../../utils/toast';
@@ -14,6 +14,8 @@ export function useHome() {
   const [isModalDeleteVisible, setIsModalDeleteVisible] = useState(false);
   const [contactBeingDeleted, setContactBeingDeleted] = useState(null);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   const loadContacts = useCallback(async () => {
     try {
@@ -31,9 +33,9 @@ export function useHome() {
     }
   }, [orderBy]);
 
-  function handleToggleOrderBy() {
+  const handleToggleOrderBy = useCallback(() => {
     setOrderBy((prevState) => (prevState === 'asc' ? 'desc' : 'asc'));
-  }
+  }, []);
 
   function handleSearchTerm(event) {
     setSearchTerm(event.target.value);
@@ -43,10 +45,10 @@ export function useHome() {
     loadContacts();
   }
 
-  function handleDeleteContact(contact) {
+  const handleDeleteContact = useCallback((contact) => {
     setContactBeingDeleted(contact);
     setIsModalDeleteVisible(true);
-  }
+  }, []);
 
   function handleCloseDeleteModal() {
     setIsModalDeleteVisible(false);
@@ -79,8 +81,8 @@ export function useHome() {
   }
 
   const filteredContacts = useMemo(() => contacts.filter((contact) => (
-    contact.name.toLowerCase().includes(searchTerm.toLowerCase())
-  )), [contacts, searchTerm]);
+    contact.name.toLowerCase().includes(deferredSearchTerm.toLowerCase())
+  )), [contacts, deferredSearchTerm]);
 
   const spaceBetweenOrCenter = contacts.length > 0 ? 'space-between' : 'center';
 
