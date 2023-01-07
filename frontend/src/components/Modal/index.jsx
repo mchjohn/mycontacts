@@ -9,14 +9,14 @@ import { Overlay, Container, Footer } from './styles';
 
 export function Modal({
   title,
-  danger,
+  danger = false,
   visible,
   children,
   onCancel,
   onConfirm,
-  isLoading,
-  cancelLabel,
-  confirmLabel,
+  isLoading = false,
+  cancelLabel = 'Cancel',
+  confirmLabel = 'Confirm',
 }) {
   const { shouldRender, animatedElementRef } = useAnimatedUnmount(visible);
 
@@ -67,11 +67,4 @@ Modal.propTypes = {
   confirmLabel: PropTypes.string,
   onCancel: PropTypes.func.isRequired,
   onConfirm: PropTypes.func.isRequired,
-};
-
-Modal.defaultProps = {
-  danger: false,
-  isLoading: false,
-  cancelLabel: 'Cancel',
-  confirmLabel: 'Confirm',
 };
