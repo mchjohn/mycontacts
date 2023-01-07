@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams, useHistory } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 
 import { toast } from '../../utils/toast';
 import ContactsService from '../../services/ContactsService';
@@ -8,7 +8,7 @@ import { useIsMounted } from '../../hooks/useIsMounted';
 
 export function useEditContact() {
   const { id } = useParams();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const contactFormRef = useRef(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -51,7 +51,7 @@ export function useEditContact() {
         if (error instanceof DOMException && error.name === 'AbortError') return;
 
         if (isMounted()) {
-          history.push('/');
+          navigate('/', { replace: true });
           toast({
             type: 'danger',
             text: 'Contact not found',
@@ -65,7 +65,7 @@ export function useEditContact() {
     return () => {
       controller.abort();
     };
-  }, [history, id, isMounted]);
+  }, [navigate, id, isMounted]);
 
   return {
     isLoading,
