@@ -60,7 +60,7 @@ export const Container = styled.div`
 
   animation: ${scaleIn} 0.3s;
 
-  ${({ isLeaving }) => isLeaving && css`animation: ${scaleOut} 0.3s; forwards`}
+  ${({ isLeaving }) => isLeaving && css`animation: ${scaleOut} 0.3s forwards;`}
 `;
 
 export const Footer = styled.footer`
