@@ -72,5 +72,5 @@ Copy and paste each command from the `src/database/schema.sql` file
 Use this insomnia file to perform requests
 ## Stack used 🧰
 
-**Back-End:** Node, Express and PostgreSQL
+**Back-End:** Node, Express and PostgreSQL.
 
